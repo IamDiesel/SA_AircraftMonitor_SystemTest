@@ -1,0 +1,59 @@
+----------------------------------------------------------------------------
+Info:
+
+
+Bei allen Fehlerklassen handelt es sich um Fehler, welche von JedisDataException
+abgeleitet sind.
+Hierarchie: Object-throwable-exception-RuntimeException-JedisDataException-UnsereFehlerKlasse
+-->Es handelt sich also um Laufzeitfehler.
+Laufzeitfehler müssen nicht mit einem try-catch-Block umgeben werden.
+Die Klassen MUESSEN von JedisException abgeleitet sein, da das Programm auf dem
+publish subsrcibe Prinzip aufbaut, sprich die Funktion onMessage nutzt.
+Die Funktion onMessage() kann keine Fehler (außer Laufzeitfehler) werfen
+--> Um onMessage() nutzen zu können zur Fehleranalyse nur Laufzeitfehler genutzt werden.
+
+-----------------------------------------------------------------------------
+
+AdsMessageException:
+0	Binary Sentence mismatched size. Sentence size must be 112 bit.
+1	Jedis String not available at ctor
+2	Jedis String does not contain enough arguments at ctor
+3	Plausibility Check failed at altitude calculation: Accepted range -1000 < x < 50175.
+4   Plausibility Check failed at airspeed calculation. Airspeed must be positive. 0 Indicates no Airspeed data is available.
+5	Unknown Message Subtype at calculating Airspeed. Known Subtypes are: 1..4.
+6	Plausibility Check at getEastWestVelocity failed. EastWest direction must have negative velocity.
+7	Plausibility Check at getNorthSouthVelocity failed. NortSouth direction must have positive velocity.
+8	Invalid Subtype at moving South Check. Only subtypes 1 and 2 may check for direction
+9	Invalid Subtype for checking EastWest direction bit. Only Subtypes 1/2 may check for East/West-movement.
+10	Invalid Subtype for checking EastWest direction bit. Only Subtypes 1/2 may check for East/West-movement.
+11	Difference from baro-altitude information is not available. This is indicated by delta value of 0.
+12	Data has exeeded binary range while checking sign of baro-alto sign bit (48). Allowed: (0..positive 1..negative.).
+13	Invalid value at calculation navigation accuracy. Allowed values are 1..4. 0 is an error indicated by airplane.
+14	Bit at pos 24 (indicating true airspeed) is exeeding binary limits. Allowed values are 1..true airspeed and 0...indicated airspeed.
+15	Data has exeeded binary range while checking availability of heading status bit (13). Allowed: (0..heading data not available 1..available.).
+16	Error while accessing Heading data. Heading data bit is set to 0 meaning no heading data is available.
+17	Unknown Subtype while accessing heading data. Allowed subtypes are 1..4.
+18	Bit 35..45 is set to 0 meaning there is no vertical movement information available.
+
+AircraftException
+100	Jedis String not available at ctor
+101	Jedis String does not contain enough arguments
+
+AdsMessageFactoryException
+200	Sentence not available at sentece2Message()-conversion"	
+201	JSON Start identifier (*) or JSON End Identifier (;) not available in sentence at sentece2Message()-conversion
+202 JSON Start identifier (*) index is greater than JSON End Identifier (;) index in sentence at sentece2Message()-conversion
+203	Sentence has wrong length (should be 99) at sentece2Message()-conversion.
+
+AircraftFactoryException
+300	String msg does not contain enough parameters at message2Aircraft()
+301 String msg does not contain enough parameters at updateIdentification()
+302	String msg does not contain enough parameters at updateVelocity()
+
+SixBitASCIIException
+400 Binary String size mismatch
+
+Http2RedisException
+500	Unknown Error while trying to open connection or while trying to read data from Flugmon-server.
+501	String received from Flugmon werbserver does not match the pattern. Message is checked from pos 0 to 38 and must be equal to :\n{\"subscribe\":[\"message\",\"ads.sentence\
+502 Unknown Message type received from server.Message Type exeeded the given range (0-31).

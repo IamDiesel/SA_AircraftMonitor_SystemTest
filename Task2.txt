@@ -1,0 +1,6 @@
+Codeänderungen:
+
+- Alle Klassen ohne Kinder final
+- NumberOfLongitudeZones Singleton
+- Attribute die nur einmal initalisiert werden sollen und dann unverändert bleiben sollen: nur getter Methoden + zusätzlich final wenn möglich
+- Redis-Publish aus A_Http2Redis.run() ausgelagert um Komplexität und Länge zu verbessern

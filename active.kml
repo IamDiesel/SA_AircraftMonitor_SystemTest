@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document>
+  <name>LineStyle.kml</name>
+  <open>1</open>
+  <Style id="linestyleExample">
+    <LineStyle>
+      <color>7f0000ff</color>
+      <width>4</width>
+    </LineStyle>
+  </Style>
+
+  <Placemark>
+    <name>Schloss</name>
+    <description>Hier steht das Schloss</description>
+
+    <Style>
+      <LineStyle>
+        <color>ff00ff00</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+
+    <LineString>
+      <coordinates>
+       9.043,49.054
+      </coordinates>
+    </LineString>
+
+  </Placemark>
+</Document>
+</kml>

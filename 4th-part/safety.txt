@@ -1,0 +1,42 @@
+saftey describes how your system behaves in case of an fault leading to an error
+
+gracefull degradation
+	if in your car the ABS is in error
+		it should respond with a message
+		instead of f.ex. hitting the brakes with full force
+
+SA_Aircraftmonitor behaves
+	
+	on loss of connection
+		Software keeps running
+		no warning
+	
+	on loss of redis
+		exception is thrown
+		keeps running
+			webserver.class 
+			browser
+		functionality
+			map stays shown
+			airplanes vanish
+	
+	on missing mapbasic
+		SA_Aricraftmonitor does not realize missing map data
+		Browser
+			no data received
+	
+	on loss of mapbasic
+		keeps running
+		no error
+			browser did make a local copy of mapbasic
+		on browser-restart
+			no data received
+			the mapbasic-file could not be loaded
+	
+
+next steps
+	is the behavior of SA_Aircraftmonitor acceptable as viewed from a user?
+	should a message be shown in any of the tested cases?
+	how should any message be presented?
+	how would a user otherwise notice that something is wrong?
+
