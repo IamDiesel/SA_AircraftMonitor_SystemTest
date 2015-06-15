@@ -23,6 +23,7 @@ public final class Control {
 @SuppressWarnings("deprecation")
 public static void main(String[] args) throws IOException
 {
+	String testFile = null;
 	
 
 	
@@ -44,12 +45,18 @@ public static void main(String[] args) throws IOException
     server.setExecutor(null); // create a default executor
     server.start();
     jedisAircraftServerThread.start();
-    A_Test2Redis localServer = new A_Test2Redis();
-	Thread serverThread = new Thread (localServer);
-	serverThread.start ();
+    Thread adsbInputServerThread = null;
+    if(args.length < 1)
+    	adsbInputServerThread = new Thread(new A_Http2Redis());
+    else
+    	{
+    	adsbInputServerThread = new Thread(new A_Test2Redis(args[0]));
+    	}
+
+	adsbInputServerThread.start ();
 
 	
-	while(serverThread.isAlive()); //wait until server has terminated
+	while(adsbInputServerThread.isAlive()); //wait until server has terminated
 	server.stop(1);
 
 	//jedisAircraftServer.unsubscribe();

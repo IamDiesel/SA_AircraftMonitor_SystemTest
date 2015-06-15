@@ -31,9 +31,9 @@ public final class A_Test2Redis implements Runnable {
 	private BufferedReader br;
 	
 	
-    public A_Test2Redis() throws FileNotFoundException
+    public A_Test2Redis(String inputFile) throws FileNotFoundException
     {
-    	br = new BufferedReader(new FileReader("input_raw.txt"));
+    	br = new BufferedReader(new FileReader(inputFile));
     }
 
     
@@ -51,7 +51,7 @@ public final class A_Test2Redis implements Runnable {
 			{
 
 
-				System.out.println(message);
+				//System.out.println(message);
 				String serverID = message.substring(message.indexOf('"')+1, message.indexOf(',')-1);
 				System.out.println(serverID);
 				message = message.substring(0, message.indexOf('{')+1) + message.substring(message.indexOf(',')+1, message.indexOf('}')+1);
@@ -60,7 +60,7 @@ public final class A_Test2Redis implements Runnable {
 				//// and publish sentence in redis
 				if("{\"subscribe\":[\"message\",\"ads.sentence\"".equals(message.substring(0, 38))  && message.indexOf('!') > 0) //{"subscribe":["message","ads.sentence"....!ADS-B*...  <--Strings from Flugmon server look like this
 				{
-					System.out.println(message);
+					//System.out.println(message);
 					msg = msgFactory.sentence2Message(message,serverID);
 					if(msg != null)
 					{

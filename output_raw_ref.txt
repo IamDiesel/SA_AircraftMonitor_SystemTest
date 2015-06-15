@@ -1,9 +1,0 @@
-Exception in thread "Thread-3" exception.AdsMessageFactoryException: AdsMessageFactoryException No. 203: Sentence has wrong length (should be 99) at sentece2Message()-conversion. Length = 100--Begin Err Data--
-Sentence: {"subscribe":["message","ads.sentence","1434121376.5985646!ADS-B8D3C662899448E85183000FB8172;\r\n"]}
-Payload: 
-binarySentence: 
-@Server: server1
---End Err Data--
-	at factory.AdsMessageFactory.sentence2Message(AdsMessageFactory.java:34)
-	at server.A_Test2Redis.run(A_Test2Redis.java:61)
-	at java.lang.Thread.run(Unknown Source)

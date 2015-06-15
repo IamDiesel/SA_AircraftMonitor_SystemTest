@@ -20,18 +20,27 @@ public final class JedisAircraftServer extends JedisPubSub
 	@Override
 	public void onMessage(String channel, String message)
 	{
+		Aircraft currentAircraft = null;
 		//Aircraft update/Statische Methode der Aircraft Factory aufrufen, sodass die Nachricht verarbeitet werden kann
-				if(jedisClient == null)
-					jedisClient = new Jedis("localhost");
-				String entry[] = message.split(";"); // 
-				String aircraftString = jedisClient.get(entry[1]);
-				Aircraft currentAircraft;
-				if(aircraftString!=null)//Überprüfung ob Aircraft bereits vorhanden
-					currentAircraft = new Aircraft(aircraftString);
-				else											//Wenn nicht, neues bauen
+				if(message.equals("exitJedisAircraftServer"))
 				{
-					currentAircraft=aircraftFactory.message2Aircraft(message);
+					this.unsubscribe();
 				}
+				else
+				{
+					if(jedisClient == null)
+						jedisClient = new Jedis("localhost");
+					String aircraftString = null;
+					String entry[] = message.split(";"); // 
+					if(entry.length > 1)
+						aircraftString = jedisClient.get(entry[1]);
+					if(aircraftString!=null)//Überprüfung ob Aircraft bereits vorhanden
+						currentAircraft = new Aircraft(aircraftString);
+					else											//Wenn nicht, neues bauen
+					{
+						currentAircraft=aircraftFactory.message2Aircraft(message);
+					}
+				
 				switch(channel)
 				{
 				case "ads.msg.identification":
@@ -40,12 +49,13 @@ public final class JedisAircraftServer extends JedisPubSub
 					aircraftFactory.updatePosition(message, currentAircraft); break;
 				case "ads.msg.velocity": 
 					aircraftFactory.updateVelocity(message, currentAircraft); break;
-				case "exit": this.unsubscribe();
 				default: System.out.println("Unknown Message"); break;
 				}
 				jedisClient.set(currentAircraft.toJedisKey(),currentAircraft.toJedisString());
 				jedisClient.expire(currentAircraft.toJedisKey(),300);
 				currentAircraft.print();
+				}
+
 				//GUI aufrufen/informieren
 		
 	}
@@ -76,6 +86,6 @@ public final class JedisAircraftServer extends JedisPubSub
 
 	@Override
 	public void onUnsubscribe(String arg0, int arg1) {
-			System.out.println("unsubscribed");
+			//System.out.println("unsubscribed");
 	}
 }

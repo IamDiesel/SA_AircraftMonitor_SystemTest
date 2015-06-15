@@ -1,10 +1,12 @@
 package server;
 
+
+
 public class HelloWorld {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println(args[0]);
+		System.out.println("Haaalooo System.out");
+		System.err.println("Haaalooo System.err");
 
 	}
 
