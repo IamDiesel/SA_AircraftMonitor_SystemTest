@@ -3,6 +3,8 @@ package server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -46,17 +48,37 @@ public static void main(String[] args) throws IOException
     server.start();
     jedisAircraftServerThread.start();
     Thread adsbInputServerThread = null;
+    
+    LinkedList<Thread> adsbInputServerList = new LinkedList<Thread>();
     if(args.length < 1)
-    	adsbInputServerThread = new Thread(new A_Http2Redis());
+    	{
+    	adsbInputServerList.addLast(new Thread(new A_Http2Redis()));
+    	}
     else
     	{
-    	adsbInputServerThread = new Thread(new A_Test2Redis(args[0]));
+	    	for(int i = 0; i < args.length; i++) //run multiple Test2Redis components in order to receive all data from all input files
+	    		adsbInputServerList.addLast(new Thread(new A_Test2Redis(args[i])));
     	}
-
-	adsbInputServerThread.start ();
+	for(int i = 0; i < args.length; i++) //start threads
+	{
+		adsbInputServerList.get(i).start();
+	}
 
 	
-	while(adsbInputServerThread.isAlive()); //wait until server has terminated
+
+	boolean inputServerRunning = true;
+	int count = 0;
+	while(inputServerRunning) //wait all input servers have terminated
+	{
+		count = 0;
+		for(int i=0; i < adsbInputServerList.size(); i++)
+		{
+			if(adsbInputServerList.get(0).isAlive() == false) //count webservers that are finished
+				count++;	
+		}
+		if(count == adsbInputServerList.size())
+			inputServerRunning = false;
+	}
 	server.stop(1);
 
 	//jedisAircraftServer.unsubscribe();
