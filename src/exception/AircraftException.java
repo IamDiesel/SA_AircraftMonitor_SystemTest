@@ -5,17 +5,17 @@ import domain.Aircraft;
 
 
 public class AircraftException extends JedisDataException{
-	private Aircraft aircraft;
-	public AircraftException(int errNo, String errText, Aircraft aircraft)
+	public AircraftException(int errNo, String errText, int aircraftID, String dataFlow, double velocity, double veloAngle, double latitude, double longitude, String flightNo)
 	{
-		super("AircraftException No"+ errNo +": " + errText + "\n" + "Aircraft Content: --Begin--\n" + aircraft.toString() +"\n--End Msg Content--");
-		this.aircraft = aircraft;
+		super("AircraftException No"+ errNo +": " + errText + "\n" + "Aircraft Content: --Begin--\n" +
+				"velocity: " +velocity+
+				", veloAngle: " +veloAngle+
+				", aircraftID: " +aircraftID+
+				", latitude: " +latitude+
+				", longitude: " +longitude+
+				",LPDF: "+ dataFlow +"\n--End Msg Content--");
+	
 	}
-	public Aircraft getAircraft()
-	{
-		return aircraft;
-	}
-		
 	
 	
 }

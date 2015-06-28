@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Created-By: "Daniel Kahrizi, Matthias Roth"
+Main-Class: server.Control
+Class-Path: jedis-2.0.0.jar ADSB_Java_1_7.jar

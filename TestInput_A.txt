@@ -1,0 +1,4 @@
+{"FlugmonSimuA","subscribe":["message","ads.sentence","1434121376.5985646!ADS-B*8D00000099448E85183000FB8172;\r\n"]}
+{"FlugmonSimuA","subscribe":["message","ads.sentence","1434121380.7364388!ADS-B*8D3C6628900DC7ED07F5750A7E14;\r\n"]}
+{"FlugmonSimuA","subscribe":["message","ads.sentence","1434121380.7682724!ADS-B*8D3C662899448E85582C00D9FB20;\r\n"]}
+{"FlugmonSimuA","subscribe":["message","ads.sentence","1434121381.1096666!ADS-B*8D3C662899448E85382C00167F5B;\r\n"]}

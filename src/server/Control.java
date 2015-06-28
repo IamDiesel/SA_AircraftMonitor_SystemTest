@@ -25,10 +25,8 @@ public final class Control {
 @SuppressWarnings("deprecation")
 public static void main(String[] args) throws IOException
 {
-	String testFile = null;
-	
+	System.out.println("START--!");
 
-	
 	try{
 	
 	//AircraftServerSubsriber aircraftServer = new AircraftServerSubsriber(aircraftServerJed,jedisAircraftServer);
@@ -36,6 +34,7 @@ public static void main(String[] args) throws IOException
 		@Override
 		public void run() {
 			Jedis jedisClient = new Jedis("localhost");
+			jedisClient.flushAll();
 			jedisClient.subscribe(new JedisAircraftServer(), "ads.msg.identification", "ads.msg.velocity", "ads.msg.position","exitJedisAircraftServer");
 		}});
 

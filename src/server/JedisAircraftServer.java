@@ -28,6 +28,7 @@ public final class JedisAircraftServer extends JedisPubSub
 				}
 				else
 				{
+					//System.out.println("JAS:"+message);
 					if(jedisClient == null)
 						jedisClient = new Jedis("localhost");
 					String aircraftString = null;
@@ -35,8 +36,8 @@ public final class JedisAircraftServer extends JedisPubSub
 					if(entry.length > 1)
 						aircraftString = jedisClient.get(entry[1]);
 					if(aircraftString!=null)//Überprüfung ob Aircraft bereits vorhanden
-						currentAircraft = new Aircraft(aircraftString);
-					else											//Wenn nicht, neues bauen
+						currentAircraft = new Aircraft(aircraftString);//nicht vorhanden: neues bauen
+					else	//falls vorhanden:  										
 					{
 						currentAircraft=aircraftFactory.message2Aircraft(message);
 					}
@@ -53,7 +54,7 @@ public final class JedisAircraftServer extends JedisPubSub
 				}
 				jedisClient.set(currentAircraft.toJedisKey(),currentAircraft.toJedisString());
 				jedisClient.expire(currentAircraft.toJedisKey(),300);
-				currentAircraft.print();
+				//currentAircraft.print();
 				}
 
 				//GUI aufrufen/informieren

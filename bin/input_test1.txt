@@ -1,1 +1,0 @@
-{"server1","subscribe":["message","ads.sentence","1434121376.5985646!ADS-B*8D3C662899448E85183000FB8172;\r\n"]}

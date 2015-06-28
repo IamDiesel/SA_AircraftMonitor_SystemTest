@@ -17,6 +17,7 @@ import domain.AdsMessage;
 import domain.AirborneIdentificationMessage;
 import domain.AirbornePositionMessage;
 import domain.AirborneVelocityMessage;
+import exception.AdsMessageFactoryException;
 import exception.Http2RedisException;
 import factory.AdsMessageFactory;
 
@@ -25,12 +26,15 @@ public final class A_Http2Redis implements Runnable {
     // url for reading the ads sentences
     private String url2 = "http://flugmon-it.hs-esslingen.de/subscribe/ads.sentence";
     private final AdsMessageFactory msgFactory = AdsMessageFactory.getInstance();
-    
+    private final String objIdentifier;
+    private static int objCnt = 0;
 	// redis instance
     private Jedis jedisClient;
     
     public A_Http2Redis(String serverURL)
     {
+    	objCnt++;
+    	objIdentifier = "A_Http2Redis#["+ objCnt + "]";
     	this.url2 = serverURL;
     }
 
@@ -84,20 +88,37 @@ public final class A_Http2Redis implements Runnable {
 		    	}
 		    	for(int i = 0; i < messages.length; i++)
 		    	{
-		    	message = messages[i] + "}";
+		    		message = messages[i] + "}";
 					if(bytesRead > 0)
 					{
 						cnt = 0;
 						
 						//System.out.println("message::::["+message+ "]bytesRead:"+bytesRead+" contentLength"+con.getContentLength());
 						serverID = message.substring(message.indexOf('"')+1, message.indexOf(',')-1);
-						System.out.println(serverID);
+						//System.out.println(serverID);
 						//message = message.substring(0, message.indexOf('{')+1) + message.substring(message.indexOf(',')+1, message.indexOf('}')+1);
 					}
 	
 					//&& "{\"subscribe\":[\"message\",\"ads.sentence\"".equals(message.substring(0, 38)) 
 					if(bytesRead > 0  && message.indexOf('!') > 0) //{"subscribe":["message","ads.sentence"....!ADS-B*...  <--Strings from Flugmon server look like this
 					{
+						String input [] = message.split("\"subscribe\":");
+						String serverIdentifier = "";
+						String sentence = "";
+						if(input.length < 1)
+							throw new Http2RedisException(503, "Searching for identifier \"subscribe:\" in message failed.");
+						else
+						{
+							switch(input.length)
+							{
+							case 1: sentence = message; serverIdentifier = "empty";break;
+							case 2: serverIdentifier = message.substring(message.indexOf("\""), message.indexOf(",\"subscribe\":"));
+									String thisIdentifier = "\""+objIdentifier+"\",";
+									message = "{"+serverIdentifier+","+thisIdentifier+"\"subscribe\":"+input[1]; break;
+							default: break;
+							}
+						}
+						
 						msg = msgFactory.sentence2Message(message);
 						if(msg != null)
 						{

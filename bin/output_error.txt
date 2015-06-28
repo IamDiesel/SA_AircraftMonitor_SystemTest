@@ -1,0 +1,12 @@
+Exception in thread "Thread-0" exception.AircraftException: AircraftException No102: Aircraft ID not tolerated at ctor.
+Aircraft Content: --Begin--
+velocity: 0.0, veloAngle: 0.0, aircraftID: 0, latitude: 0.0, longitude: 0.0,LPDF: "FlugmonSimuA","A_Http2Redis#[1]"
+--End Msg Content--
+	at domain.Aircraft.<init>(Aircraft.java:19)
+	at factory.AircraftFactory.message2Aircraft(AircraftFactory.java:27)
+	at server.JedisAircraftServer.onMessage(JedisAircraftServer.java:42)
+	at redis.clients.jedis.JedisPubSub.process(JedisPubSub.java:113)
+	at redis.clients.jedis.JedisPubSub.proceed(JedisPubSub.java:83)
+	at redis.clients.jedis.Jedis.subscribe(Jedis.java:1974)
+	at server.Control$1.run(Control.java:38)
+	at java.lang.Thread.run(Thread.java:745)

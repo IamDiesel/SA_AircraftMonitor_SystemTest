@@ -43,8 +43,8 @@ public final class AdsMessageFactory
 			default: break;
 			}
 		}
-		System.out.println("MSG:"+sentence);
-		System.out.println("SRV:"+serverIdentifier);
+		//System.out.println("MSG:"+sentence);
+		//System.out.println("SRV:"+serverIdentifier);
 			
 		if(sentence == null || sentence.length() == 0)
 			throw new AdsMessageFactoryException(200, "Sentence not available at sentece2Message()-conversion",sentence,"","",-1,-1,-1,serverIdentifier);

@@ -11,27 +11,32 @@ private final int aircraftID;
 private AirbornePositionMessage msg_even,msg_odd;
 private double latitude,longitude;
 private String flightNo=new String("");
-public Aircraft(int aircraftID)
+private String lastPublishDataFlow = "";
+public Aircraft(int aircraftID, String dataFlow)
 {
+	lastPublishDataFlow = dataFlow;
+	if(aircraftID == 0)
+		throw new AircraftException(102, "Aircraft ID not tolerated at ctor.",aircraftID,dataFlow,velocity,veloAngle,latitude,longitude,flightNo);
 	this.aircraftID = aircraftID;
 	velocity = -1;
 	veloAngle = -1;
 	latitude = -1;
 	longitude = -1;
 	flightNo = "";
+	
 }
 
 public Aircraft(String jedisString) throws AircraftException// JedisString comma seperated: aircraftID,fligthNo,velocity,veloAngle,latitude,longitude,lastOdd,even,(odd)
 {
 	
 	if(jedisString == null || jedisString.length() == 0)
-		throw new AircraftException(100,"JedisString not available at ctor.",this);
-	System.out.println("JedisString: "+jedisString);
+		throw new AircraftException(100,"JedisString not available at ctor.",0,"N/A",velocity,veloAngle,latitude,longitude,flightNo);
+	//System.out.println("JedisString: "+jedisString);
 	String even = new String("");
 	String odd = new String ("");
 	String entry [] = jedisString.split(",");
 	if(entry.length < 7)
-		throw new AircraftException(101,"JedisString does not contain enough arguments ("+entry.length+"/min7).",this);
+		throw new AircraftException(101,"JedisString does not contain enough arguments ("+entry.length+"/min7).",0,"N/A",velocity,veloAngle,latitude,longitude,flightNo);
 	aircraftID = Integer.parseInt(entry[0]);
 	flightNo = entry[1];
 	velocity = Double.parseDouble(entry[2]);
@@ -123,6 +128,7 @@ public void print()
 {
 	System.out.println("********************************");
 		System.out.println("Aircraft ID: " + aircraftID);
+		System.out.println("Most Recent Pub Chain: "+this.lastPublishDataFlow);
 	if(velocity != -1)
 		System.out.println("Geschwindigkeit: "+ velocity);
 	if(veloAngle != -1)
@@ -137,6 +143,7 @@ public void print()
 		System.out.println("LastOddMessage:"+msg_odd.toString());
 	if(msg_even != null)
 		System.out.println("LastEvenMessage:"+msg_even.toString());
+	
 }
 public String toJedisKey()
 {
@@ -161,7 +168,9 @@ public String toString()
 		", lastOdd: " +getLastOdd()+
 		", aircraftID: " +getID()+
 		", latitude: " +latitude+
-		", longitude: " +longitude;
+		", longitude: " +longitude+
+		",LPDF: "+this.lastPublishDataFlow;
+	
 
 }/* toString() hinzugefuegt - glkeit00 */
 
