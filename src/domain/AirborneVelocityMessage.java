@@ -9,9 +9,9 @@ import exception.AdsMessageException;
 public final class AirborneVelocityMessage extends AdsMessage{
 										
 	//Constructor for Subtype 1/2:
-	public AirborneVelocityMessage(String binarySentence, int messageTypeD,int originatorD,long time) throws AdsMessageException 
+	public AirborneVelocityMessage(String binarySentence, int messageTypeD,int originatorD,long time,String dataFlow) throws AdsMessageException 
 	{
-		super(binarySentence,messageTypeD, originatorD, time);
+		super(binarySentence,messageTypeD, originatorD, time,dataFlow);
 	}
 
 	

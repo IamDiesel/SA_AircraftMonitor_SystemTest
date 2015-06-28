@@ -47,38 +47,46 @@ public static void main(String[] args) throws IOException
     server.setExecutor(null); // create a default executor
     server.start();
     jedisAircraftServerThread.start();
-    Thread adsbInputServerThread = null;
     
-    LinkedList<Thread> adsbInputServerList = new LinkedList<Thread>();
+    LinkedList<Thread> adsbPublisherList = new LinkedList<Thread>();
+    LinkedList<HttpServer> flugmonSimuServerList = new LinkedList<HttpServer>();
     if(args.length < 1)
     	{
-    	adsbInputServerList.addLast(new Thread(new A_Http2Redis()));
+    	adsbPublisherList.addLast(new Thread(new A_Http2Redis("http://flugmon-it.hs-esslingen.de/subscribe/ads.sentence")));
     	}
-    else
+    else	//Test-Mode
     	{
 	    	for(int i = 0; i < args.length; i++) //run multiple Test2Redis components in order to receive all data from all input files
-	    		adsbInputServerList.addLast(new Thread(new A_Test2Redis(args[i])));
+	    	{
+	    		flugmonSimuServerList.addLast(HttpServer.create(new InetSocketAddress(3333+i+1),0));
+	    		flugmonSimuServerList.getLast().createContext("/flugmonSimu", new FlugmonSimu(args[i]));
+	    		flugmonSimuServerList.getLast().setExecutor(null);
+	    		
+	    		adsbPublisherList.addLast(new Thread(new A_Http2Redis("http://localhost:"+String.valueOf(3333+i+1)+"/flugmonSimu")));
+	    	}
+	    		
     	}
 	for(int i = 0; i < args.length; i++) //start threads
 	{
-		adsbInputServerList.get(i).start();
+		flugmonSimuServerList.get(i).start();
+		adsbPublisherList.get(i).start();
 	}
-
 	
-
 	boolean inputServerRunning = true;
 	int count = 0;
-	while(inputServerRunning) //wait all input servers have terminated
+	while(inputServerRunning) //wait until all input servers have terminated
 	{
 		count = 0;
-		for(int i=0; i < adsbInputServerList.size(); i++)
+		for(int i=0; i < adsbPublisherList.size(); i++)
 		{
-			if(adsbInputServerList.get(0).isAlive() == false) //count webservers that are finished
+			if(adsbPublisherList.get(0).isAlive() == false) //count webservers that are finished
 				count++;	
 		}
-		if(count == adsbInputServerList.size())
+		if(count == adsbPublisherList.size())
 			inputServerRunning = false;
 	}
+	for(int i = 0; i < flugmonSimuServerList.size(); i++)//End Simulation servers
+		flugmonSimuServerList.get(i).stop(1);
 	server.stop(1);
 
 	//jedisAircraftServer.unsubscribe();

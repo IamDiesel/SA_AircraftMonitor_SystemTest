@@ -5,9 +5,9 @@ import exception.AdsMessageException;
 
 public final class AirbornePositionMessage extends AdsMessage{
 
-	public AirbornePositionMessage(String binarySentence,int messageTypeD, int originatorD, long time) throws AdsMessageException 
+	public AirbornePositionMessage(String binarySentence,int messageTypeD, int originatorD, long time,String dataFlow) throws AdsMessageException 
 	{
-		super(binarySentence,messageTypeD, originatorD, time);
+		super(binarySentence,messageTypeD, originatorD, time, dataFlow);
 	}
 	public AirbornePositionMessage(String jedisString) throws AdsMessageException
 	{

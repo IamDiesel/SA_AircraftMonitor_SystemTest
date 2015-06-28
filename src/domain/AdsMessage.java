@@ -15,9 +15,9 @@ public class AdsMessage {
 private final int 		messageTypeD, //contains MessageType in decimal format
 						originatorD;//Sender of the message in decimal format
 protected final Timestamp tStamp; //contains time of the message
-protected final String binarySentence;
+protected final String binarySentence, dataFlow;
 
-public AdsMessage(String binarySentence, int messageTypeD, int originatorD, long time) throws AdsMessageException
+public AdsMessage(String binarySentence, int messageTypeD, int originatorD, long time, String dataFlow) throws AdsMessageException
 {
 	if(binarySentence.length() != 112)//14 bytes
 		throw new AdsMessageException(0,"Binary Sentence mismatched size. Sentence size must be 112 bit (binarySentence size =" + binarySentence.length() + ").");
@@ -26,6 +26,7 @@ public AdsMessage(String binarySentence, int messageTypeD, int originatorD, long
 	this.messageTypeD=messageTypeD;
 	this.originatorD=originatorD;
 	this.tStamp= new Timestamp(time);
+	this.dataFlow = dataFlow;
 }
 public AdsMessage(String jedisString) throws AdsMessageException
 {
@@ -35,13 +36,16 @@ public AdsMessage(String jedisString) throws AdsMessageException
 	
 	String entry [] = jedisString.split(";");
 	
-	if(entry.length < 4)
+	if(entry.length < 5)
 		throw new AdsMessageException(2,"Jedis String does not conain enough arguments at ctor (entrySize: "+entry.length+",/4");
 	
-	this.messageTypeD = Integer.parseInt(entry[0]);
-	this.originatorD = Integer.parseInt(entry[1]);
-	this.binarySentence = entry[2];
-	this.tStamp= new Timestamp(Long.parseLong(entry[3]));
+	this.messageTypeD = Integer.parseInt(entry[1]);
+	this.originatorD = Integer.parseInt(entry[2]);
+	this.binarySentence = entry[3];
+	this.tStamp= new Timestamp(Long.parseLong(entry[4]));
+	this.dataFlow = entry[0];
+
+		
 }
 
 public int getMessageTypeD()
@@ -60,7 +64,8 @@ public String toString()
 {
 	DateFormat simpleDate = new SimpleDateFormat("EEEE', 'dd.MM.YYYY', 'H:mm:ss.S");
 	//return "Originator:"+originatorD;
-	return	"messageTypeD: " +getMessageTypeD()+
+	return	"DataPath: "+ dataFlow+
+			" messageTypeD: " +getMessageTypeD()+
 			", originatorD: " +getOriginatorD()+
 			", time: "+simpleDate.format(tStamp)+
 			", binarySentence: " + binarySentence;
@@ -68,7 +73,7 @@ public String toString()
 }
 public String toJedisString()
 {
-	return messageTypeD+";"+originatorD+";"+binarySentence+";"+tStamp.getTime();
+	return dataFlow+";"+messageTypeD+";"+originatorD+";"+binarySentence+";"+tStamp.getTime();
 
 }
 

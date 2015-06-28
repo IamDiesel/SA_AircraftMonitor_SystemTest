@@ -6,9 +6,9 @@ import translator.SixBitASCII;
 
 
 public final class AirborneIdentificationMessage extends AdsMessage{
-	public AirborneIdentificationMessage(String binarySentence, int messageTypeD, int originatorD, long time) throws AdsMessageException
+	public AirborneIdentificationMessage(String binarySentence, int messageTypeD, int originatorD, long time, String dataFlow) throws AdsMessageException
 	{
-		super(binarySentence,messageTypeD,originatorD,time);
+		super(binarySentence,messageTypeD,originatorD,time,dataFlow);
 	}
 	public String getAircraftID() throws SixBitASCIIException
 	{

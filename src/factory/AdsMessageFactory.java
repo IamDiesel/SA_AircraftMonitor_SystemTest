@@ -26,8 +26,26 @@ public final class AdsMessageFactory
 			instance = new AdsMessageFactory();
 		return instance;
 	}
-	public AdsMessage sentence2Message(String sentence, String serverIdentifier) throws AdsMessageException
+	public AdsMessage sentence2Message(String message) throws AdsMessageException
 	{
+		//sentence = sentence.substring(0, sentence.indexOf('{')+1) + sentence.substring(sentence.indexOf(',')+1, sentence.indexOf('}')+1);
+		String input [] = message.split("\"subscribe\":");
+		String serverIdentifier = "";
+		String sentence = "";
+		if(input.length < 1)
+			throw new AdsMessageFactoryException(204, "Searching for identifier \"subscribe:\" in message failed. Given message instead of sentence",message,"","",-1,-1,-1,serverIdentifier);
+		else
+		{
+			switch(input.length)
+			{
+			case 1: sentence = message; serverIdentifier = "empty";break;
+			case 2: sentence = "{\"subscribe\":"+input[1]; serverIdentifier = message.substring(message.indexOf("\""), message.indexOf(",\"subscribe\":")); break;
+			default: break;
+			}
+		}
+		System.out.println("MSG:"+sentence);
+		System.out.println("SRV:"+serverIdentifier);
+			
 		if(sentence == null || sentence.length() == 0)
 			throw new AdsMessageFactoryException(200, "Sentence not available at sentece2Message()-conversion",sentence,"","",-1,-1,-1,serverIdentifier);
 		if(!(sentence.length() == 101 || sentence.length() == 99)  )//99?
@@ -59,18 +77,18 @@ public final class AdsMessageFactory
 		switch(messageType)
 		{
 		case 1: case 2: case 3: case 4: //Aircraft Identification Message
-				return new AirborneIdentificationMessage(binarySentence,messageType,originator,time);
+				return new AirborneIdentificationMessage(binarySentence,messageType,originator,time,serverIdentifier);
 	
 		case 9: //9-18, 20-22 Airborne Position Message
 		case 10:case 11: case 12:case 13:case 14:case 15:case 16:case 17:case 18: case 20:case 21:
 		case 22: 
-			AirbornePositionMessage msg = new AirbornePositionMessage(binarySentence,messageType,originator,time);
+			AirbornePositionMessage msg = new AirbornePositionMessage(binarySentence,messageType,originator,time,serverIdentifier);
 			//System.out.println("Position: "+msg);
 			return msg;
 			//return new AirbornePositionMessage(binarySentence,messageType,originator,time);
 		
-		case 19: return new AirborneVelocityMessage(binarySentence, messageType, originator, time);
-		default: return new AdsMessage(binarySentence,messageType,originator,time);
+		case 19: return new AirborneVelocityMessage(binarySentence, messageType, originator, time,serverIdentifier);
+		default: return new AdsMessage(binarySentence,messageType,originator,time,serverIdentifier);
 		}
 	}
 }

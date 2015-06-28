@@ -1,0 +1,4 @@
+{"server2","subscribe":["message","ads.sentence","1434121376.5985646!ADS-B*8D3C662899448E85183000FB8172;\r\n"]}
+{"server2","subscribe":["message","ads.sentence","1434121388.6566389!ADS-B*8D3C6628900D90774A023AEB25ED;\r\n"]}
+{"server2","subscribe":["message","ads.sentence","1434121388.7085202!ADS-B*8D3C662899448E84F83000F5FCF7;\r\n"]}
+{"server2","subscribe":["message","ads.sentence","1434121389.1284654!ADS-B*8D3C6628900D8077420230B54772;\r\n"]}

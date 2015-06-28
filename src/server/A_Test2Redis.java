@@ -61,7 +61,7 @@ public final class A_Test2Redis implements Runnable {
 				if("{\"subscribe\":[\"message\",\"ads.sentence\"".equals(message.substring(0, 38))  && message.indexOf('!') > 0) //{"subscribe":["message","ads.sentence"....!ADS-B*...  <--Strings from Flugmon server look like this
 				{
 					//System.out.println(message);
-					msg = msgFactory.sentence2Message(message,serverID);
+					msg = msgFactory.sentence2Message(message);
 					if(msg != null)
 					{
 						publish(msg);

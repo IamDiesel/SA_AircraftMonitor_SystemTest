@@ -1,6 +1,3 @@
-/factory/
 /server/
+/factory/
 /domain/
-/exception/
-/translator/
-/ManifestEclipse.mf
